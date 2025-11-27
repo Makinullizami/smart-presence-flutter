@@ -1,0 +1,22 @@
+PDF PLACEHOLDER - DAFTAR FITUR SMART PRESENCE
+
+Untuk mengkonversi docs/features.md ke PDF:
+
+1. Install pandoc: https://pandoc.org/installing.html
+2. Jalankan command: pandoc docs/features.md -o docs/features.pdf
+
+ATAU
+
+1. Gunakan online converter: https://www.markdowntopdf.com/
+2. Upload file docs/features.md
+3. Download hasil PDF
+
+DOKUMEN INI BERISI:
+- Deskripsi lengkap aplikasi Smart Presence
+- Fitur siswa (login, face enrollment, absensi, riwayat)
+- Fitur admin (manajemen siswa, monitoring, laporan)
+- Teknologi AI yang digunakan (ML Kit, Face Embedding)
+- Arsitektur sistem dan navigasi aplikasi
+- Daftar fitur MVP dan tambahan
+
+Dibuat untuk evaluasi tugas kuliah - November 2024
