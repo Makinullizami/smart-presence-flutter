@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/student_dashboard_controller.dart';
-import '../../controllers/attendance_controller.dart';
 
 class AttendanceCard extends StatelessWidget {
-  final StudentDashboardController dashboardController = Get.find();
-  final AttendanceController attendanceController = Get.find();
+  const AttendanceCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final StudentDashboardController dashboardController = Get.find();
+
     return Obx(() {
       final todayAttendance = dashboardController.todayAttendance.value;
 
@@ -16,7 +16,7 @@ class AttendanceCard extends StatelessWidget {
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -27,7 +27,7 @@ class AttendanceCard extends StatelessWidget {
                     color: Colors.blue.shade600,
                     size: 24,
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
                     'Absensi Hari Ini',
                     style: TextStyle(
@@ -38,12 +38,12 @@ class AttendanceCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Status
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: todayAttendance != null
                       ? Colors.green.shade50

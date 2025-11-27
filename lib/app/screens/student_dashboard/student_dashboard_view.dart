@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/student_dashboard_controller.dart';
 import '../../controllers/auth_controller.dart';
-import '../../routes/app_routes.dart';
 import 'attendance_card.dart';
 import 'stats_card.dart';
 import 'timetable_card.dart';
@@ -12,21 +11,23 @@ import 'messages_card.dart';
 import 'profile_card.dart';
 
 class StudentDashboardView extends StatelessWidget {
-  final StudentDashboardController controller = Get.put(
-    StudentDashboardController(),
-  );
-  final AuthController authController = Get.find();
+  const StudentDashboardView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final StudentDashboardController controller = Get.put(
+      StudentDashboardController(),
+    );
+    final AuthController authController = Get.find();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dashboard Siswa'),
+        title: const Text('Dashboard Siswa'),
         backgroundColor: Colors.blue.shade600,
         elevation: 0,
         actions: [
           IconButton(
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
             onPressed: () => authController.logout(),
           ),
         ],
@@ -47,49 +48,49 @@ class StudentDashboardView extends StatelessWidget {
           return RefreshIndicator(
             onRefresh: controller.refresh,
             child: SingleChildScrollView(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Header Section
-                  ProfileCard(),
+                  const ProfileCard(),
 
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   // Quick Attendance Section
-                  AttendanceCard(),
+                  const AttendanceCard(),
 
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   // Stats Section
-                  StatsCard(),
+                  const StatsCard(),
 
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   // Today's Timetable
-                  TimetableCard(),
+                  const TimetableCard(),
 
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   // Notifications
-                  NotificationsCard(),
+                  const NotificationsCard(),
 
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   // Assignments
-                  AssignmentsCard(),
+                  const AssignmentsCard(),
 
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   // Messages
-                  MessagesCard(),
+                  const MessagesCard(),
 
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   // Quick Actions
                   _buildQuickActions(),
 
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   // Footer
                   _buildFooter(),
@@ -107,7 +108,7 @@ class StudentDashboardView extends StatelessWidget {
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -119,7 +120,7 @@ class StudentDashboardView extends StatelessWidget {
                 color: Colors.blue.shade700,
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -172,7 +173,7 @@ class StudentDashboardView extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: Container(
         width: 70,
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: Colors.blue.shade50,
           borderRadius: BorderRadius.circular(12),
@@ -181,7 +182,7 @@ class StudentDashboardView extends StatelessWidget {
         child: Column(
           children: [
             Icon(icon, color: Colors.blue.shade600, size: 24),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
@@ -205,7 +206,7 @@ class StudentDashboardView extends StatelessWidget {
             'Smart Presence - Absen Cerdas',
             style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(
             'v1.0.0 - Flutter + Laravel',
             style: TextStyle(color: Colors.grey.shade500, fontSize: 10),

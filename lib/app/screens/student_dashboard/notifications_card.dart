@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/student_dashboard_controller.dart';
-import '../../models/notification_model.dart';
+import '../../../models/notification_model.dart';
 
 class NotificationsCard extends StatelessWidget {
-  final StudentDashboardController controller = Get.find();
+  const NotificationsCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final StudentDashboardController controller = Get.find();
+
     return Obx(() {
       final notifications = controller.notifications.take(3).toList();
 
@@ -15,7 +17,7 @@ class NotificationsCard extends StatelessWidget {
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -26,7 +28,7 @@ class NotificationsCard extends StatelessWidget {
                     color: Colors.blue.shade600,
                     size: 24,
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
                     'Notifikasi',
                     style: TextStyle(
@@ -35,7 +37,7 @@ class NotificationsCard extends StatelessWidget {
                       color: Colors.blue.shade700,
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   TextButton(
                     onPressed: () {
                       Get.snackbar(
@@ -43,16 +45,16 @@ class NotificationsCard extends StatelessWidget {
                         'Halaman notifikasi lengkap akan segera hadir',
                       );
                     },
-                    child: Text('Lihat Semua'),
+                    child: const Text('Lihat Semua'),
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               if (notifications.isEmpty)
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade50,
                     borderRadius: BorderRadius.circular(8),
@@ -65,7 +67,7 @@ class NotificationsCard extends StatelessWidget {
                         size: 48,
                         color: Colors.grey.shade400,
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         'Tidak ada notifikasi',
                         style: TextStyle(
@@ -79,7 +81,7 @@ class NotificationsCard extends StatelessWidget {
               else
                 ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: notifications.length,
                   itemBuilder: (context, index) {
                     final notification = notifications[index];
@@ -95,8 +97,8 @@ class NotificationsCard extends StatelessWidget {
 
   Widget _buildNotificationItem(NotificationModel notification) {
     return Container(
-      margin: EdgeInsets.only(bottom: 8),
-      padding: EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: notification.isRead ? Colors.white : Colors.blue.shade50,
         borderRadius: BorderRadius.circular(8),
@@ -112,7 +114,7 @@ class NotificationsCard extends StatelessWidget {
           Container(
             width: 8,
             height: 8,
-            margin: EdgeInsets.only(top: 6),
+            margin: const EdgeInsets.only(top: 6),
             decoration: BoxDecoration(
               color: notification.isRead
                   ? Colors.transparent
@@ -120,7 +122,7 @@ class NotificationsCard extends StatelessWidget {
               shape: BoxShape.circle,
             ),
           ),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,14 +135,14 @@ class NotificationsCard extends StatelessWidget {
                     color: Colors.blue.shade800,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   notification.body,
                   style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   _formatDate(notification.createdAt),
                   style: TextStyle(fontSize: 10, color: Colors.grey.shade500),

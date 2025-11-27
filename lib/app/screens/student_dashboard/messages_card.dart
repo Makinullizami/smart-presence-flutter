@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/student_dashboard_controller.dart';
-import '../../models/message_model.dart';
+import '../../../models/message_model.dart';
 
 class MessagesCard extends StatelessWidget {
-  final StudentDashboardController controller = Get.find();
+  const MessagesCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final StudentDashboardController controller = Get.find();
+
     return Obx(() {
       final messages = controller.messages.take(2).toList();
 
@@ -15,14 +17,14 @@ class MessagesCard extends StatelessWidget {
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Icon(Icons.message, color: Colors.blue.shade600, size: 24),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
                     'Pesan & Pengumuman',
                     style: TextStyle(
@@ -31,7 +33,7 @@ class MessagesCard extends StatelessWidget {
                       color: Colors.blue.shade700,
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   TextButton(
                     onPressed: () {
                       Get.snackbar(
@@ -39,16 +41,16 @@ class MessagesCard extends StatelessWidget {
                         'Halaman pesan lengkap akan segera hadir',
                       );
                     },
-                    child: Text('Lihat Semua'),
+                    child: const Text('Lihat Semua'),
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               if (messages.isEmpty)
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade50,
                     borderRadius: BorderRadius.circular(8),
@@ -61,7 +63,7 @@ class MessagesCard extends StatelessWidget {
                         size: 48,
                         color: Colors.grey.shade400,
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         'Tidak ada pesan',
                         style: TextStyle(
@@ -75,7 +77,7 @@ class MessagesCard extends StatelessWidget {
               else
                 ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     final message = messages[index];
@@ -91,8 +93,8 @@ class MessagesCard extends StatelessWidget {
 
   Widget _buildMessageItem(Message message) {
     return Container(
-      margin: EdgeInsets.only(bottom: 8),
-      padding: EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: message.isRead ? Colors.white : Colors.blue.shade50,
         borderRadius: BorderRadius.circular(8),
@@ -126,21 +128,21 @@ class MessagesCard extends StatelessWidget {
                 ),
             ],
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(
             message.content,
             style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Row(
             children: [
               Text(
                 'Dari: ${message.sender}',
                 style: TextStyle(fontSize: 10, color: Colors.grey.shade500),
               ),
-              Spacer(),
+              const Spacer(),
               Text(
                 _formatDate(message.createdAt),
                 style: TextStyle(fontSize: 10, color: Colors.grey.shade500),

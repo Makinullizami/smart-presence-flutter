@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/student_dashboard_controller.dart';
-import '../../models/timetable_model.dart';
+import '../../../models/timetable_model.dart';
 
 class TimetableCard extends StatelessWidget {
-  final StudentDashboardController controller = Get.find();
+  const TimetableCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final StudentDashboardController controller = Get.find();
+
     return Obx(() {
       final timetables = controller.timetableToday;
 
@@ -15,14 +17,14 @@ class TimetableCard extends StatelessWidget {
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Icon(Icons.schedule, color: Colors.blue.shade600, size: 24),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
                     'Jadwal Hari Ini',
                     style: TextStyle(
@@ -33,12 +35,12 @@ class TimetableCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               if (timetables.isEmpty)
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade50,
                     borderRadius: BorderRadius.circular(8),
@@ -51,7 +53,7 @@ class TimetableCard extends StatelessWidget {
                         size: 48,
                         color: Colors.grey.shade400,
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         'Tidak ada kelas hari ini',
                         style: TextStyle(
@@ -65,7 +67,7 @@ class TimetableCard extends StatelessWidget {
               else
                 ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: timetables.length,
                   itemBuilder: (context, index) {
                     final timetable = timetables[index];
@@ -81,8 +83,8 @@ class TimetableCard extends StatelessWidget {
 
   Widget _buildTimetableItem(Timetable timetable) {
     return Container(
-      margin: EdgeInsets.only(bottom: 8),
-      padding: EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.blue.shade50,
         borderRadius: BorderRadius.circular(8),
@@ -117,7 +119,7 @@ class TimetableCard extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,7 +132,7 @@ class TimetableCard extends StatelessWidget {
                     color: Colors.blue.shade800,
                   ),
                 ),
-                SizedBox(height: 2),
+                const SizedBox(height: 2),
                 Text(
                   'Ruang: ${timetable.room}',
                   style: TextStyle(fontSize: 12, color: Colors.blue.shade600),

@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import '../../controllers/student_dashboard_controller.dart';
 
 class StatsCard extends StatelessWidget {
-  final StudentDashboardController controller = Get.find();
+  const StatsCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final StudentDashboardController controller = Get.find();
+
     return Obx(() {
       final stats = controller.attendanceStats.value;
 
@@ -14,14 +16,14 @@ class StatsCard extends StatelessWidget {
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Icon(Icons.bar_chart, color: Colors.blue.shade600, size: 24),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
                     'Statistik Kehadiran',
                     style: TextStyle(
@@ -32,7 +34,7 @@ class StatsCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Stats Grid
               Row(
@@ -45,7 +47,7 @@ class StatsCard extends StatelessWidget {
                       Icons.check_circle,
                     ),
                   ),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: _buildStatItem(
                       'Tidak Hadir',

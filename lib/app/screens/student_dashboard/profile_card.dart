@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import '../../controllers/student_dashboard_controller.dart';
 
 class ProfileCard extends StatelessWidget {
-  final StudentDashboardController controller = Get.find();
+  const ProfileCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final StudentDashboardController controller = Get.find();
+
     return Obx(() {
       final user = controller.user.value;
       final todayAttendance = controller.todayAttendance.value;
@@ -15,7 +17,7 @@ class ProfileCard extends StatelessWidget {
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             gradient: LinearGradient(
@@ -42,7 +44,7 @@ class ProfileCard extends StatelessWidget {
                     // Gunakan NetworkImage untuk foto dari server
                     // Fallback ke Icon jika foto belum ada
                   ),
-                  SizedBox(width: 16),
+                  const SizedBox(width: 16),
 
                   // User Info
                   Expanded(

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/student_dashboard_controller.dart';
-import '../../models/assignment_model.dart';
+import '../../../models/assignment_model.dart';
 
 class AssignmentsCard extends StatelessWidget {
-  final StudentDashboardController controller = Get.find();
+  const AssignmentsCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final StudentDashboardController controller = Get.find();
+
     return Obx(() {
       final assignments = controller.assignments.take(3).toList();
 
@@ -15,14 +17,14 @@ class AssignmentsCard extends StatelessWidget {
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Icon(Icons.assignment, color: Colors.blue.shade600, size: 24),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
                     'Tugas',
                     style: TextStyle(
@@ -31,7 +33,7 @@ class AssignmentsCard extends StatelessWidget {
                       color: Colors.blue.shade700,
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   TextButton(
                     onPressed: () {
                       Get.snackbar(
@@ -39,16 +41,16 @@ class AssignmentsCard extends StatelessWidget {
                         'Halaman tugas lengkap akan segera hadir',
                       );
                     },
-                    child: Text('Lihat Semua'),
+                    child: const Text('Lihat Semua'),
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               if (assignments.isEmpty)
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade50,
                     borderRadius: BorderRadius.circular(8),
@@ -61,7 +63,7 @@ class AssignmentsCard extends StatelessWidget {
                         size: 48,
                         color: Colors.grey.shade400,
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         'Tidak ada tugas',
                         style: TextStyle(
@@ -75,7 +77,7 @@ class AssignmentsCard extends StatelessWidget {
               else
                 ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: assignments.length,
                   itemBuilder: (context, index) {
                     final assignment = assignments[index];
@@ -90,14 +92,12 @@ class AssignmentsCard extends StatelessWidget {
   }
 
   Widget _buildAssignmentItem(Assignment assignment) {
-    final isOverdue = DateTime.now().isAfter(
-      DateTime.parse(assignment.dueDate),
-    );
+    final isOverdue = _isDateOverdue(assignment.dueDate);
     final isSubmitted = assignment.status == 'submitted';
 
     return Container(
-      margin: EdgeInsets.only(bottom: 8),
-      padding: EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: isSubmitted
             ? Colors.green.shade50
@@ -127,7 +127,7 @@ class AssignmentsCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(4),
             ),
           ),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +140,7 @@ class AssignmentsCard extends StatelessWidget {
                     color: Colors.blue.shade800,
                   ),
                 ),
-                SizedBox(height: 2),
+                const SizedBox(height: 2),
                 Text(
                   'Deadline: ${_formatDate(assignment.dueDate)}',
                   style: TextStyle(
@@ -175,6 +175,15 @@ class AssignmentsCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  bool _isDateOverdue(String dateString) {
+    try {
+      final date = DateTime.parse(dateString);
+      return DateTime.now().isAfter(date);
+    } catch (e) {
+      return false;
+    }
   }
 
   String _formatDate(String dateString) {

@@ -4,6 +4,7 @@ import '../bindings/camera_binding.dart';
 import '../bindings/attendance_binding.dart';
 import '../screens/auth/login_view.dart';
 import '../screens/auth/register_view.dart';
+import '../screens/dashboard_redirect_view.dart';
 import '../screens/attendance/attendance_view.dart';
 import '../screens/admin_dashboard/dashboard_admin_view.dart';
 import '../screens/student_dashboard/dashboard_siswa_view.dart';
@@ -19,6 +20,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.register,
       page: () => RegisterView(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.dashboard,
+      page: () => DashboardRedirectView(),
       binding: AuthBinding(),
     ),
     GetPage(
