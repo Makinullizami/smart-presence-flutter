@@ -8,18 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('faces', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('image_path');
-            $table->json('embedding');
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->string('title');
+            $table->text('message');
+            $table->enum('type', ['attendance', 'appeal', 'schedule', 'announcement', 'reminder'])->default('announcement');
+            $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('faces');
+        Schema::dropIfExists('notifications');
     }
 };
