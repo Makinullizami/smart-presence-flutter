@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/student_dashboard_controller.dart';
-import '../../controllers/auth_controller.dart';
+import '../../../controllers/auth_controller.dart';
 import 'attendance_card.dart';
 import 'stats_card.dart';
 import 'timetable_card.dart';

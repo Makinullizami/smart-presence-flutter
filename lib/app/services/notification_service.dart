@@ -1,50 +1,92 @@
+import 'package:flutter/foundation.dart' show debugPrint;
+
 import '../../models/notification_model.dart';
 import 'api_service.dart';
 
 class NotificationService {
-  final ApiService _apiService = ApiService();
+  final ApiService _api_service = ApiService();
+
+  // Simple in-memory cache for mock notifications
+  final List<NotificationModel> _cache = [];
 
   Future<List<NotificationModel>> fetchNotifications() async {
     try {
-      // Mock data for now
-      return _getMockNotifications();
+      if (_cache.isEmpty) {
+        _cache.addAll(_getMockNotifications());
+      }
+      return List<NotificationModel>.from(_cache);
     } catch (e) {
-      print('Error fetching notifications: $e');
-      return _getMockNotifications();
+      debugPrint('Error fetching notifications: $e');
+      return List<NotificationModel>.from(_cache);
     }
   }
 
   Future<void> markRead(int id) async {
     try {
-      // This would call the real API
-      print('Marked notification $id as read');
+      // Simulate API call here if needed using _api_service
+
+      final index = _cache.indexWhere((n) => n.id == id);
+      if (index != -1) {
+        final existing = _cache[index];
+        final now = DateTime.now();
+        _cache[index] = NotificationModel(
+          id: existing.id,
+          userId: existing.userId,
+          title: existing.title,
+          message: existing.message,
+          type: existing.type,
+          data: existing.data,
+          isRead: true,
+          readAt: now,
+          createdAt: existing.createdAt,
+          updatedAt: now,
+        );
+      }
+      debugPrint('Marked notification $id as read (mock)');
     } catch (e) {
-      print('Error marking notification as read: $e');
+      debugPrint('Error marking notification as read: $e');
+      rethrow;
     }
   }
 
   List<NotificationModel> _getMockNotifications() {
+    final now = DateTime.now();
     return [
       NotificationModel(
         id: 1,
+        userId: 1,
         title: 'Pengumuman Libur',
-        body: 'Besok ada libur nasional untuk memperingati hari kemerdekaan',
-        createdAt: '2024-11-27T08:00:00Z',
+        message: 'Besok ada libur nasional untuk memperingati hari kemerdekaan',
+        type: 'system',
+        data: null,
         isRead: false,
+        readAt: null,
+        createdAt: now.subtract(Duration(days: 9)),
+        updatedAt: now.subtract(Duration(days: 9)),
       ),
       NotificationModel(
         id: 2,
+        userId: 1,
         title: 'Tugas Matematika',
-        body: 'Deadline pengumpulan tugas matematika besok pukul 08:00',
-        createdAt: '2024-11-26T15:00:00Z',
+        message: 'Deadline pengumpulan tugas matematika besok pukul 08:00',
+        type: 'assignment',
+        data: null,
         isRead: true,
+        readAt: now.subtract(Duration(days: 8)),
+        createdAt: now.subtract(Duration(days: 8)),
+        updatedAt: now.subtract(Duration(days: 8)),
       ),
       NotificationModel(
         id: 3,
+        userId: 1,
         title: 'Ujian Akhir Semester',
-        body: 'Jadwal UAS telah diumumkan. Silakan cek portal akademik',
-        createdAt: '2024-11-25T10:00:00Z',
+        message: 'Jadwal UAS telah diumumkan. Silakan cek portal akademik',
+        type: 'schedule',
+        data: null,
         isRead: false,
+        readAt: null,
+        createdAt: now.subtract(Duration(days: 10)),
+        updatedAt: now.subtract(Duration(days: 10)),
       ),
     ];
   }

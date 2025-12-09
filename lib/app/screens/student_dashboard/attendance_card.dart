@@ -85,7 +85,7 @@ class AttendanceCard extends StatelessWidget {
                           ),
                           if (todayAttendance != null)
                             Text(
-                              'Jam: ${todayAttendance.time}',
+                              'Jam: ${todayAttendance.checkInTime ?? '-'}',
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.green.shade600,

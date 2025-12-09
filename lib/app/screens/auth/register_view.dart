@@ -1,14 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../controllers/auth_controller.dart';
+import '../../../controllers/auth_controller.dart';
 import '../../routes/app_routes.dart';
 
-class RegisterView extends StatelessWidget {
-  final AuthController authController = Get.find();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController roleController = TextEditingController();
+class RegisterView extends StatefulWidget {
+  const RegisterView({Key? key}) : super(key: key);
+
+  @override
+  State<RegisterView> createState() => _RegisterViewState();
+}
+
+class _RegisterViewState extends State<RegisterView> {
+  late final AuthController authController;
+  late final TextEditingController nameController;
+  late final TextEditingController emailController;
+  late final TextEditingController passwordController;
+  String? selectedRole;
+
+  @override
+  void initState() {
+    super.initState();
+    authController = Get.find<AuthController>();
+    nameController = TextEditingController();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    selectedRole = null;
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +65,7 @@ class RegisterView extends StatelessWidget {
                         size: 80,
                         color: Colors.green.shade600,
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Text(
                         'Daftar Akun',
                         style: TextStyle(
@@ -49,7 +74,7 @@ class RegisterView extends StatelessWidget {
                           color: Colors.green.shade800,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         'Buat akun baru untuk Kehadiran Cerdas',
                         style: TextStyle(
@@ -58,12 +83,12 @@ class RegisterView extends StatelessWidget {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(height: 32),
+                      const SizedBox(height: 32),
                       TextField(
                         controller: nameController,
                         decoration: InputDecoration(
                           labelText: 'Nama',
-                          prefixIcon: Icon(Icons.person),
+                          prefixIcon: const Icon(Icons.person),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -71,12 +96,12 @@ class RegisterView extends StatelessWidget {
                           fillColor: Colors.grey.shade50,
                         ),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       TextField(
                         controller: emailController,
                         decoration: InputDecoration(
                           labelText: 'Email',
-                          prefixIcon: Icon(Icons.email),
+                          prefixIcon: const Icon(Icons.email),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -84,12 +109,12 @@ class RegisterView extends StatelessWidget {
                           fillColor: Colors.grey.shade50,
                         ),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       TextField(
                         controller: passwordController,
                         decoration: InputDecoration(
                           labelText: 'Kata Sandi',
-                          prefixIcon: Icon(Icons.lock),
+                          prefixIcon: const Icon(Icons.lock),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -98,21 +123,19 @@ class RegisterView extends StatelessWidget {
                         ),
                         obscureText: true,
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       DropdownButtonFormField<String>(
-                        value: roleController.text.isEmpty
-                            ? null
-                            : roleController.text,
+                        value: selectedRole,
                         decoration: InputDecoration(
                           labelText: 'Peran',
-                          prefixIcon: Icon(Icons.work),
+                          prefixIcon: const Icon(Icons.work),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                           filled: true,
                           fillColor: Colors.grey.shade50,
                         ),
-                        items: [
+                        items: const [
                           DropdownMenuItem(
                             value: 'student',
                             child: Text('Siswa'),
@@ -123,22 +146,24 @@ class RegisterView extends StatelessWidget {
                           ),
                         ],
                         onChanged: (value) {
-                          roleController.text = value ?? '';
+                          setState(() {
+                            selectedRole = value;
+                          });
                         },
                       ),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
                       Obx(
                         () => SizedBox(
                           width: double.infinity,
                           height: 50,
                           child: authController.isLoading.value
-                              ? Center(child: CircularProgressIndicator())
+                              ? const Center(child: CircularProgressIndicator())
                               : ElevatedButton(
                                   onPressed: () => authController.register(
                                     nameController.text,
                                     emailController.text,
                                     passwordController.text,
-                                    roleController.text,
+                                    selectedRole ?? '',
                                   ),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.green.shade600,
@@ -146,7 +171,7 @@ class RegisterView extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
-                                  child: Text(
+                                  child: const Text(
                                     'Daftar',
                                     style: TextStyle(
                                       fontSize: 16,
@@ -156,7 +181,7 @@ class RegisterView extends StatelessWidget {
                                 ),
                         ),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       TextButton(
                         onPressed: () => Get.toNamed(AppRoutes.login),
                         child: Text(

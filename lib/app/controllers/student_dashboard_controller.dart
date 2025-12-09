@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:get/get.dart';
 import '../../models/user_model.dart';
 import '../../models/attendance_model.dart';
@@ -7,7 +8,7 @@ import '../../models/notification_model.dart';
 import '../../models/assignment_model.dart';
 import '../../models/message_model.dart';
 import '../services/api_service.dart';
-import 'auth_controller.dart';
+import '../../controllers/auth_controller.dart';
 
 class StudentDashboardController extends GetxController {
   final ApiService _apiService = ApiService();
@@ -42,7 +43,7 @@ class StudentDashboardController extends GetxController {
         _loadMessages(),
       ]);
     } catch (e) {
-      print('Error loading dashboard data: $e');
+      debugPrint('Error loading dashboard data: $e');
       // Load mock data for demo
       _loadMockData();
     } finally {
@@ -61,18 +62,25 @@ class StudentDashboardController extends GetxController {
       final response = await _apiService.getAttendanceHistory(
         user.value?.id ?? 1,
       );
-      final today = DateTime.now().toIso8601String().split('T')[0];
+      final today = DateTime.now();
       todayAttendance.value = response.firstWhereOrNull(
-        (attendance) => attendance.date == today,
+        (attendance) =>
+            attendance.date.year == today.year &&
+            attendance.date.month == today.month &&
+            attendance.date.day == today.day,
       );
     } catch (e) {
       // Mock today attendance
+      final now = DateTime.now();
       todayAttendance.value = Attendance(
         id: 1,
         userId: user.value?.id ?? 1,
-        date: DateTime.now().toIso8601String().split('T')[0],
-        time: '08:00',
+        date: now,
+        checkInTime: '08:00',
         status: 'present',
+        isOfflineSync: false,
+        createdAt: now,
+        updatedAt: now,
       );
     }
   }
@@ -131,24 +139,33 @@ class StudentDashboardController extends GetxController {
       notifications.value = [
         NotificationModel(
           id: 1,
+          userId: user.value?.id ?? 1,
           title: 'Pengumuman Libur',
-          body: 'Besok ada libur nasional',
-          createdAt: '2024-11-27T08:00:00Z',
+          message: 'Besok ada libur nasional',
+          type: 'system',
           isRead: false,
+          createdAt: DateTime.now().subtract(Duration(hours: 2)),
+          updatedAt: DateTime.now().subtract(Duration(hours: 2)),
         ),
         NotificationModel(
           id: 2,
+          userId: user.value?.id ?? 1,
           title: 'Tugas Matematika',
-          body: 'Deadline tugas besok',
-          createdAt: '2024-11-26T15:00:00Z',
+          message: 'Deadline tugas besok',
+          type: 'assignment',
           isRead: true,
+          createdAt: DateTime.now().subtract(Duration(hours: 8)),
+          updatedAt: DateTime.now().subtract(Duration(hours: 8)),
         ),
         NotificationModel(
           id: 3,
+          userId: user.value?.id ?? 1,
           title: 'Ujian Akhir Semester',
-          body: 'Jadwal UAS telah diumumkan',
-          createdAt: '2024-11-25T10:00:00Z',
+          message: 'Jadwal UAS telah diumumkan',
+          type: 'schedule',
           isRead: false,
+          createdAt: DateTime.now().subtract(Duration(hours: 24)),
+          updatedAt: DateTime.now().subtract(Duration(hours: 24)),
         ),
       ];
     } catch (e) {
@@ -189,7 +206,9 @@ class StudentDashboardController extends GetxController {
           title: 'Pengumuman UAS',
           content: 'Ujian akhir semester dimulai minggu depan',
           sender: 'Admin Sekolah',
-          createdAt: '2024-11-27T07:00:00Z',
+          createdAt: DateTime.now()
+              .subtract(Duration(hours: 20))
+              .toIso8601String(),
           isRead: false,
         ),
       ];

@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../controllers/attendance_controller.dart';
+import 'package:smart_presence/controllers/attendance_controller.dart';
 
 class AttendanceBinding extends Bindings {
   @override

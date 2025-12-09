@@ -137,7 +137,7 @@ class NotificationsCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  notification.body,
+                  notification.message,
                   style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -155,11 +155,10 @@ class NotificationsCard extends StatelessWidget {
     );
   }
 
-  String _formatDate(String dateString) {
+  String _formatDate(DateTime dateTime) {
     try {
-      final date = DateTime.parse(dateString);
       final now = DateTime.now();
-      final difference = now.difference(date);
+      final difference = now.difference(dateTime);
 
       if (difference.inDays == 0) {
         return 'Hari ini';
@@ -169,7 +168,7 @@ class NotificationsCard extends StatelessWidget {
         return '${difference.inDays} hari yang lalu';
       }
     } catch (e) {
-      return dateString;
+      return dateTime.toIso8601String().split('T')[0];
     }
   }
 }

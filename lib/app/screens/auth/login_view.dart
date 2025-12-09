@@ -1,12 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../controllers/auth_controller.dart';
+import '../../../controllers/auth_controller.dart';
 import '../../routes/app_routes.dart';
 
-class LoginView extends StatelessWidget {
-  final AuthController authController = Get.find();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+class LoginView extends StatefulWidget {
+  const LoginView({Key? key}) : super(key: key);
+
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
+  late final AuthController authController;
+  late final TextEditingController emailController;
+  late final TextEditingController passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    authController = Get.find<AuthController>();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +56,7 @@ class LoginView extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.face, size: 80, color: Colors.blue.shade600),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Text(
                         'Kehadiran Cerdas',
                         style: TextStyle(
@@ -43,7 +65,7 @@ class LoginView extends StatelessWidget {
                           color: Colors.blue.shade800,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         'Masuk ke akun Anda',
                         style: TextStyle(
@@ -51,12 +73,12 @@ class LoginView extends StatelessWidget {
                           color: Colors.grey.shade600,
                         ),
                       ),
-                      SizedBox(height: 32),
+                      const SizedBox(height: 32),
                       TextField(
                         controller: emailController,
                         decoration: InputDecoration(
                           labelText: 'Email',
-                          prefixIcon: Icon(Icons.email),
+                          prefixIcon: const Icon(Icons.email),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -64,12 +86,12 @@ class LoginView extends StatelessWidget {
                           fillColor: Colors.grey.shade50,
                         ),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       TextField(
                         controller: passwordController,
                         decoration: InputDecoration(
                           labelText: 'Kata Sandi',
-                          prefixIcon: Icon(Icons.lock),
+                          prefixIcon: const Icon(Icons.lock),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -78,13 +100,13 @@ class LoginView extends StatelessWidget {
                         ),
                         obscureText: true,
                       ),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
                       Obx(
                         () => SizedBox(
                           width: double.infinity,
                           height: 50,
                           child: authController.isLoading.value
-                              ? Center(child: CircularProgressIndicator())
+                              ? const Center(child: CircularProgressIndicator())
                               : ElevatedButton(
                                   onPressed: () => authController.login(
                                     emailController.text,
@@ -96,7 +118,7 @@ class LoginView extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
-                                  child: Text(
+                                  child: const Text(
                                     'Masuk',
                                     style: TextStyle(
                                       fontSize: 16,
@@ -106,7 +128,7 @@ class LoginView extends StatelessWidget {
                                 ),
                         ),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       TextButton(
                         onPressed: () => Get.toNamed(AppRoutes.register),
                         child: Text(

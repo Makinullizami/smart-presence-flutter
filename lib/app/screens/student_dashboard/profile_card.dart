@@ -7,7 +7,7 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final StudentDashboardController controller = Get.find();
+    final StudentDashboardController controller = Get.find<StudentDashboardController>();
 
     return Obx(() {
       final user = controller.user.value;
@@ -28,10 +28,8 @@ class ProfileCard extends StatelessWidget {
           ),
           child: Column(
             children: [
-              // Header Row: Avatar + User Info + Quick Action
               Row(
                 children: [
-                  // Profile Avatar
                   CircleAvatar(
                     radius: 30,
                     backgroundColor: Colors.white,
@@ -40,26 +38,21 @@ class ProfileCard extends StatelessWidget {
                       size: 30,
                       color: Colors.blue.shade600,
                     ),
-                    // TODO: Implementasi - Integrasi dengan database profil siswa
-                    // Gunakan NetworkImage untuk foto dari server
-                    // Fallback ke Icon jika foto belum ada
                   ),
                   const SizedBox(width: 16),
-
-                  // User Info
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           user?.name ?? 'Nama Siswa',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
                           'NIM: ${user?.nim ?? '12345678'}',
                           style: TextStyle(
@@ -68,14 +61,13 @@ class ProfileCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'Kelas: ${user?.className ?? 'XII IPA 1'}',
+                          'Kelas: ${user?.classId?.toString() ?? '-'}',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.white.withOpacity(0.9),
                           ),
                         ),
-                        // Petunjuk untuk Siswa
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
                           'Pastikan data Anda akurat',
                           style: TextStyle(
@@ -87,23 +79,17 @@ class ProfileCard extends StatelessWidget {
                       ],
                     ),
                   ),
-
-                  // Quick Action Button - Absensi Hari Ini
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: Colors.white.withOpacity(0.3)),
                     ),
                     child: InkWell(
-                      onTap: () {
-                        // TODO: Implementasi - Navigate ke halaman detail absensi
-                        // Bisa ke QR scanner atau detail absensi harian yang sudah terekam
-                        controller.goToAttendance();
-                      },
+                      onTap: controller.goToAttendance,
                       child: Row(
-                        children: [
+                        children: const [
                           Icon(
                             Icons.qr_code_scanner,
                             color: Colors.white,
@@ -124,15 +110,11 @@ class ProfileCard extends StatelessWidget {
                   ),
                 ],
               ),
-
-              SizedBox(height: 12),
-
-              // Status Row: Attendance Badge + Quick Stats
+              const SizedBox(height: 12),
               Row(
                 children: [
-                  // Attendance Badge
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: todayAttendance != null
                           ? Colors.green.shade500
@@ -148,12 +130,12 @@ class ProfileCard extends StatelessWidget {
                           color: Colors.white,
                           size: 16,
                         ),
-                        SizedBox(width: 4),
+                        const SizedBox(width: 4),
                         Text(
                           todayAttendance != null
                               ? 'Hadir Hari Ini'
                               : 'Belum Absen',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
@@ -162,10 +144,7 @@ class ProfileCard extends StatelessWidget {
                       ],
                     ),
                   ),
-
-                  Spacer(),
-
-                  // Quick Stats
+                  const Spacer(),
                   Row(
                     children: [
                       Icon(
@@ -173,10 +152,10 @@ class ProfileCard extends StatelessWidget {
                         color: Colors.orange.shade300,
                         size: 16,
                       ),
-                      SizedBox(width: 4),
+                      const SizedBox(width: 4),
                       Text(
                         'Streak: ${controller.attendanceStats.value?.currentStreak ?? 0}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
@@ -186,11 +165,9 @@ class ProfileCard extends StatelessWidget {
                   ),
                 ],
               ),
-
-              // Petunjuk Penggunaan untuk Siswa
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Container(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
@@ -202,7 +179,7 @@ class ProfileCard extends StatelessWidget {
                       color: Colors.white.withOpacity(0.8),
                       size: 16,
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         'Gunakan tombol "Absen" untuk melakukan absensi masuk/pulang',

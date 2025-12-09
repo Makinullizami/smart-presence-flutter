@@ -17,6 +17,7 @@ class User extends Authenticatable
         'password',
         'role',
         'nim',
+        'nip_nim',
         'employee_id',
         'class_id',
         'department_id',
@@ -24,6 +25,7 @@ class User extends Authenticatable
         'address',
         'date_of_birth',
         'gender',
+        'profile_photo',
         'profile_photo_path',
         'bio',
         'emergency_contact_name',
@@ -120,8 +122,8 @@ class User extends Authenticatable
      */
     public function getProfilePhotoUrlAttribute()
     {
-        return $this->profile_photo_path
-            ? asset('storage/' . $this->profile_photo_path)
+        return $this->profile_photo ?? $this->profile_photo_path
+            ? asset('storage/' . ($this->profile_photo ?? $this->profile_photo_path))
             : null;
     }
 

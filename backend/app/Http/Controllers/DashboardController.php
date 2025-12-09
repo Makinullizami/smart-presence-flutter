@@ -11,6 +11,150 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
+    public function getAdminDashboard(Request $request)
+    {
+        $user = $request->user();
+
+        $this->authorize('viewAdminDashboard', $user);
+
+        $date = $request->query('date', Carbon::today()->format('Y-m-d'));
+        $filter = $request->query('filter', 'today'); // today, week, month
+        $unit = $request->query('unit'); // department_id or class_id
+
+        $query = Attendance::with('user');
+
+        // Apply date filter
+        switch ($filter) {
+            case 'week':
+                $startDate = Carbon::parse($date)->startOfWeek();
+                $endDate = Carbon::parse($date)->endOfWeek();
+                $query->whereBetween('date', [$startDate, $endDate]);
+                break;
+            case 'month':
+                $startDate = Carbon::parse($date)->startOfMonth();
+                $endDate = Carbon::parse($date)->endOfMonth();
+                $query->whereBetween('date', [$startDate, $endDate]);
+                break;
+            default: // today
+                $query->where('date', $date);
+                break;
+        }
+
+        // Apply unit filter
+        if ($unit) {
+            if (str_starts_with($unit, 'dept_')) {
+                $departmentId = str_replace('dept_', '', $unit);
+                $query->whereHas('user', function ($q) use ($departmentId) {
+                    $q->where('department_id', $departmentId);
+                });
+            } elseif (str_starts_with($unit, 'class_')) {
+                $classId = str_replace('class_', '', $unit);
+                $query->whereHas('user', function ($q) use ($classId) {
+                    $q->where('class_id', $classId);
+                });
+            }
+        }
+
+        $attendances = $query->get();
+
+        // KPI Cards
+        $totalUsers = User::where('role', '!=', 'admin')->count();
+        $presentToday = $attendances->where('status', 'present')->count();
+        $lateToday = $attendances->where('status', 'late')->count();
+        $absentToday = $totalUsers - $attendances->count();
+        $leaveToday = $attendances->whereIn('status', ['sick', 'leave', 'permit'])->count();
+
+        // Charts data
+        $weeklyData = [];
+        if ($filter === 'week') {
+            for ($i = 0; $i < 7; $i++) {
+                $day = Carbon::parse($date)->startOfWeek()->addDays($i);
+                $dayAttendances = $attendances->where('date', $day->format('Y-m-d'));
+                $weeklyData[] = [
+                    'date' => $day->format('Y-m-d'),
+                    'present' => $dayAttendances->where('status', 'present')->count(),
+                ];
+            }
+        }
+
+        $distribution = [
+            'present' => $attendances->where('status', 'present')->count(),
+            'late' => $attendances->where('status', 'late')->count(),
+            'absent' => $absentToday,
+            'leave' => $leaveToday,
+        ];
+
+        // Top 10 most late users
+        $lateUsers = Attendance::selectRaw('user_id, COUNT(*) as late_count')
+            ->where('status', 'late')
+            ->whereBetween('date', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+            ->groupBy('user_id')
+            ->orderBy('late_count', 'desc')
+            ->limit(10)
+            ->with('user')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'user_id' => $item->user_id,
+                    'name' => $item->user->name,
+                    'late_count' => $item->late_count,
+                ];
+            });
+
+        // Pending appeals
+        $pendingAppeals = \App\Models\Appeal::where('status', 'pending')
+            ->with('user')
+            ->limit(10)
+            ->get()
+            ->map(function ($appeal) {
+                return [
+                    'id' => $appeal->id,
+                    'user_name' => $appeal->user->name,
+                    'type' => $appeal->type,
+                    'reason' => $appeal->reason,
+                    'created_at' => $appeal->created_at->format('Y-m-d'),
+                ];
+            });
+
+        // Classes with lowest attendance
+        $classAttendance = \App\Models\ClassModel::with('users')->get()->map(function ($class) use ($attendances) {
+            $classUsers = $class->users;
+            $classAttendances = $attendances->whereIn('user_id', $classUsers->pluck('id'));
+            $presentCount = $classAttendances->where('status', 'present')->count();
+            $percentage = $classUsers->count() > 0 ? ($presentCount / $classUsers->count()) * 100 : 0;
+
+            return [
+                'class_id' => $class->id,
+                'class_name' => $class->name,
+                'attendance_percentage' => round($percentage, 1),
+            ];
+        })->sortBy('attendance_percentage')->take(10);
+
+        return response()->json([
+            'kpi' => [
+                'total_active_users' => $totalUsers,
+                'present_today' => $presentToday,
+                'late_today' => $lateToday,
+                'absent_today' => $absentToday,
+                'leave_today' => $leaveToday,
+            ],
+            'charts' => [
+                'weekly_attendance' => $weeklyData,
+                'distribution' => $distribution,
+            ],
+            'tables' => [
+                'top_late_users' => $lateUsers,
+                'pending_appeals' => $pendingAppeals,
+                'lowest_attendance_classes' => $classAttendance,
+            ],
+            'filters' => [
+                'date' => $date,
+                'filter' => $filter,
+                'unit' => $unit,
+            ],
+        ]);
+    }
+
     public function getSupervisorDashboard(Request $request)
     {
         $user = $request->user();

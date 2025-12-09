@@ -7,6 +7,11 @@ use App\Models\ClassModel;
 
 class DashboardPolicy
 {
+    public function viewAdminDashboard(User $user): bool
+    {
+        return $user->role === 'admin';
+    }
+
     public function viewSupervisorDashboard(User $user): bool
     {
         return $user->role === 'supervisor';
